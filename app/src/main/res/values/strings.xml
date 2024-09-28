@@ -18,4 +18,9 @@
     <string name="action_settings">Configurações</string>
     <string name="first_fragment_label">Primeiro Fragmento</string>
     <string name="second_fragment_label">Segundo Fragmento</string>
+    <!-- Adicione estas strings -->
+    <string name="menu_bottom">Menu Bottom</string>
+    <string name="home_bottom">Home Bottom</string>
+    <string name="help_bottom">Help Bottom</string>
+    <string name="inicio">Início</string>
 </resources>
