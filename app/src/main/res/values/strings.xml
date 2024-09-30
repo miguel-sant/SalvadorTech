@@ -23,4 +23,7 @@
     <string name="home_bottom">Home Bottom</string>
     <string name="help_bottom">Help Bottom</string>
     <string name="inicio">Início</string>
+
+    <string name="observacao"><b>Observação do técnico:</b> Máquina muito suja, provavelmente a causa do problema seja poeira nos slots de memória.</string>
+    <string name="pecas"><b>Peças adicionadas ou substituidas:</b> Nenhuma peça foi adicionada a sua manutenção.</string>
 </resources>
