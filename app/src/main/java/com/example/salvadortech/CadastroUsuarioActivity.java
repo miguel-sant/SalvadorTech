@@ -7,19 +7,26 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class CadastroUsuarioActivity extends AppCompatActivity {
 
-    private EditText inputPassword, inputRepeatPassword;
+    private EditText inputEmail, inputPassword, inputRepeatPassword;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_cadastro_cliente); // Certifique-se de que o nome do layout está correto.
+        setContentView(R.layout.activity_cadastro_cliente);
 
+        inputEmail = findViewById(R.id.input_email); // EditText para email
         inputPassword = findViewById(R.id.input_password);
         inputRepeatPassword = findViewById(R.id.input_repeat_password);
         Button buttonRegister = findViewById(R.id.button_register);
+
+        // Inicialize Firebase Auth
+        mAuth = FirebaseAuth.getInstance();
 
         buttonRegister.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -30,22 +37,32 @@ public class CadastroUsuarioActivity extends AppCompatActivity {
     }
 
     private void verificarCadastro() {
+        String email = inputEmail.getText().toString().trim();
         String senha = inputPassword.getText().toString().trim();
         String repetirSenha = inputRepeatPassword.getText().toString().trim();
 
-
-        if (TextUtils.isEmpty(senha) || TextUtils.isEmpty(repetirSenha)) {
+        if (TextUtils.isEmpty(email) || TextUtils.isEmpty(senha) || TextUtils.isEmpty(repetirSenha)) {
             Toast.makeText(this, "Por favor, preencha todos os campos.", Toast.LENGTH_SHORT).show();
             return;
         }
-
 
         if (!senha.equals(repetirSenha)) {
             Toast.makeText(this, "As senhas não coincidem.", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        Toast.makeText(this, "Cadastro realizado com sucesso!", Toast.LENGTH_SHORT).show();
-
+        // Tenta criar o usuário
+        mAuth.createUserWithEmailAndPassword(email, senha)
+                .addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful()) {
+                        // Cadastro bem-sucedido
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        Toast.makeText(CadastroUsuarioActivity.this, "Cadastro realizado com sucesso!", Toast.LENGTH_SHORT).show();
+                        finish(); // Finaliza a activity atual
+                    } else {
+                        // Exibe a mensagem de erro
+                        Toast.makeText(CadastroUsuarioActivity.this, "Falha ao criar usuário: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 }

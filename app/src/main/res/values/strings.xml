@@ -26,4 +26,7 @@
 
     <string name="observacao"><b>Observação do técnico:</b> Máquina muito suja, provavelmente a causa do problema seja poeira nos slots de memória.</string>
     <string name="pecas"><b>Peças adicionadas ou substituidas:</b> Nenhuma peça foi adicionada a sua manutenção.</string>
+
+    <string name="your_web_client_id">655805994337-v1fb80t8t6qeq9sge302u8fhtta0p2uf.apps.googleusercontent.com</string>
+
 </resources>

@@ -6,4 +6,8 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
+    <style name="CustomButtonStyle">
+        <item name="android:background">#000</item> <!-- Cor preta -->
+        <item name="android:textColor">#FFFFFF</item> <!-- Cor do texto branca -->
+    </style>
 </resources>

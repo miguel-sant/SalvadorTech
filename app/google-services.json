@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "655805994337",
+    "project_id": "salvadortech-ffe2a",
+    "storage_bucket": "salvadortech-ffe2a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:655805994337:android:10775d2fca02ed0f71a120",
+        "android_client_info": {
+          "package_name": "com.example.salvadortech"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB1KBuygNEOorAR4Fb3OvOw0eCoyNlu2M4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
