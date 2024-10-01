@@ -1,21 +1,17 @@
 package com.example.salvadortech;
 
 public class User {
-    private String email;
+    public String nome;
+    public String cpf;
+    public String email;
+    public int admin; // Adiciona o campo admin
 
-    public User() {
-        // Construtor vazio necessário para o Firestore
-    }
-
-    public User(String email) {
+    // Construtor com campo admin
+    public User(String nome, String cpf, String email, int admin) {
+        this.nome = nome;
+        this.cpf = cpf;
         this.email = email;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
+        this.admin = admin;
     }
 }
+

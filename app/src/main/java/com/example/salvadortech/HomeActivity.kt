@@ -1,8 +1,10 @@
 package com.example.salvadortech
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
@@ -17,10 +19,18 @@ class HomeActivity : AppCompatActivity() {
 
         drawerLayout = findViewById(R.id.drawer_layout)
 
-        // Configurando o ícone do menu
+        // Configurando o ícone do menu para abrir o DrawerLayout
         val menuIcon: ImageView = findViewById(R.id.menu_icon)
         menuIcon.setOnClickListener {
             drawerLayout.openDrawer(GravityCompat.START)
+        }
+
+        // Configurar o clique para abrir outra Activity ao clicar no TextView "Adicionar Serviço"
+        val addServiceOption: TextView = findViewById(R.id.add_service_option)
+        addServiceOption.setOnClickListener {
+            // Navegar para a nova Activity (por exemplo, AddServiceActivity)
+            val intent = Intent(this, AddServicoActivity::class.java)
+            startActivity(intent)
         }
     }
 
@@ -34,4 +44,3 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 }
-

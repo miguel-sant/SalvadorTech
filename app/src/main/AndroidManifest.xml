@@ -15,6 +15,9 @@
         android:theme="@style/Theme.SalvadorTech"
         tools:targetApi="31">
 
+        <activity android:name=".AddServicoActivity"
+            android:exported="true" />
+
         <activity
             android:name=".DetalhamentoServicoActivity"
             android:exported="true" />
