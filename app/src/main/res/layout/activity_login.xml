@@ -51,4 +51,14 @@
         android:text="Não tem uma conta? Cadastre-se aqui"
         android:textColor="@color/colorAccent"/>
 
+    <TextView
+        android:id="@+id/btn_esqueceuSenha"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/button_login"
+        android:layout_marginTop="10dp"
+        android:layout_centerHorizontal="true"
+        android:text="Esqueceu sua senha?"
+        android:textColor="@color/colorAccent" />
+
 </RelativeLayout>

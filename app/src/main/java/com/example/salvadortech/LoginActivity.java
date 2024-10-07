@@ -23,7 +23,7 @@ public class LoginActivity extends AppCompatActivity {
     private Button btn_login;
     private TextView btn_cadastrar;
     private FirebaseAuth mAuth;
-
+    private TextView btn_esqueceuSenha;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,7 +34,7 @@ public class LoginActivity extends AppCompatActivity {
         edt_senha = findViewById(R.id.password);
         btn_login = findViewById(R.id.button_login);
         btn_cadastrar = findViewById(R.id.btn_signUp);
-
+        btn_esqueceuSenha = findViewById(R.id.btn_esqueceuSenha);
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -66,6 +66,13 @@ public class LoginActivity extends AppCompatActivity {
                 abrirTelaCadastro();
             }
         });
+
+        btn_esqueceuSenha.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                abrirTelaEsqueceuSenha();
+            }
+        });
     }
 
     private void abrirTelaPrincipal() {
@@ -76,6 +83,11 @@ public class LoginActivity extends AppCompatActivity {
 
     private void abrirTelaCadastro() {
         Intent intent = new Intent(LoginActivity.this, CadastroUsuarioActivity.class);
+        startActivity(intent);
+    }
+
+    private void abrirTelaEsqueceuSenha() {
+        Intent intent = new Intent(LoginActivity.this, EsqueceuSenhaActivity.class);
         startActivity(intent);
     }
 }
