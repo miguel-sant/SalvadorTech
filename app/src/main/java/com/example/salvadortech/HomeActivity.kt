@@ -18,6 +18,7 @@ class HomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
+
         drawerLayout = findViewById(R.id.drawer_layout)
 
         // Configurando o ícone do menu para abrir o DrawerLayout
@@ -26,18 +27,18 @@ class HomeActivity : AppCompatActivity() {
             drawerLayout.openDrawer(GravityCompat.START)
         }
 
-        // Configurar o clique para abrir outra Activity ao clicar no TextView "Adicionar Serviço"
-        val addServiceOption: TextView = findViewById(R.id.add_service_option)
-        addServiceOption.setOnClickListener {
-            // Navegar para a nova Activity (por exemplo, AddServiceActivity)
-            val intent = Intent(this, AddServicoActivity::class.java)
-            startActivity(intent)
-        }
-
-        // Adicionando o clique ao card para abrir a DetalhamentoServicoActivity
+        // Declarando cardServico uma vez
         val cardServico: LinearLayout = findViewById(R.id.card_servico)
         cardServico.setOnClickListener {
             val intent = Intent(this, DetalhamentoServicoActivity::class.java)
+            startActivity(intent)
+        }
+
+        // Configurar o clique para abrir outra Activity ao clicar no TextView "Adicionar Serviço"
+        val addServiceOption: TextView = findViewById(R.id.add_service_option)
+        addServiceOption.setOnClickListener {
+            // Navegar para a nova Activity (por exemplo, AddServicoActivity)
+            val intent = Intent(this, AddServicoActivity::class.java)
             startActivity(intent)
         }
     }
@@ -52,4 +53,3 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 }
-
