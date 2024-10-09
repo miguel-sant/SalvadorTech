@@ -5,7 +5,7 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".HomeActivity">
+    tools:context=".AddServicoActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -41,7 +41,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:text="Adicionar Serviço"
+                android:text="Criar Serviço"
                 android:textColor="@color/white"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -51,10 +51,86 @@
                 android:layout_width="41dp"
                 android:layout_height="31dp"
                 android:layout_alignParentEnd="true"
-                android:layout_marginEnd="-3dp"
                 android:contentDescription="User Icon"
                 android:src="@drawable/perfil" />
         </RelativeLayout>
+
+        <ScrollView
+            android:id="@+id/scrollView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/top_bar">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <EditText
+                    android:id="@+id/descricao_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Descrição do serviço"
+                    android:inputType="textMultiLine"
+                    android:minLines="3"
+                    android:maxLines="5"
+                    android:background="@drawable/rounded_edittext"
+                    android:padding="10dp"
+                    android:textColor="@android:color/black"
+                    android:textColorHint="@android:color/black" />
+
+                <Spinner
+                    android:id="@+id/status_spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30px"
+                    android:entries="@array/status_options"
+                    android:background="@drawable/rounded_edittext"
+                    android:spinnerMode="dropdown"
+                    android:popupBackground="@color/white"
+                    android:dropDownVerticalOffset="30dp"
+                    android:dropDownHorizontalOffset="20dp"
+                    android:dropDownWidth="match_parent"
+                    android:dropDownSelector="@drawable/spinnert_item_selector" />
+
+                <EditText
+                    android:id="@+id/observacao_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Observações (opcional)"
+                    android:inputType="textMultiLine"
+                    android:minLines="3"
+                    android:maxLines="5"
+                    android:background="@drawable/rounded_edittext"
+                    android:padding="10dp"
+                    android:layout_marginTop="16dp"
+                    android:textColor="@android:color/black"
+                    android:textColorHint="@android:color/black" />
+
+                <EditText
+                    android:id="@+id/pecas_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Peças necessárias (opcional)"
+                    android:inputType="text"
+                    android:background="@drawable/rounded_edittext"
+                    android:padding="10dp"
+                    android:layout_marginTop="16dp"
+                    android:textColor="@android:color/black"
+                    android:textColorHint="@android:color/black" />
+
+                <Button
+                    android:id="@+id/save_service_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Salvar Serviço"
+                    android:layout_marginTop="16dp"
+                    android:background="@color/black"
+                    android:textColor="@color/white"
+                    android:padding="12dp" />
+            </LinearLayout>
+        </ScrollView>
 
         <LinearLayout
             android:id="@+id/bottom_navigation"
