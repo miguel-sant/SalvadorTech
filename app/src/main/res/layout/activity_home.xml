@@ -266,7 +266,7 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColorHint="#000"
+            android:textColorHint="#7C7C7C7C"
             android:hint="Do que você precisa?"
             android:drawableStart="@drawable/search"
             android:drawablePadding="8dp"
@@ -275,16 +275,35 @@
             android:background="@drawable/rounded_edittext" />
 
         <TextView
-            android:layout_width="match_parent"
+            android:id="@+id/perfil"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
             android:text="Perfil"
-            android:padding="16dp" />
+            android:textColor="#000"
+            android:textSize="16sp"
+            android:layout_marginTop="40dp"
+            android:layout_gravity="center_vertical" />
+
+
         <TextView
             android:id="@+id/add_service_option"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:text="Adicionar Serviço"
+            android:layout_marginTop="10dp"
+            android:textColor="#000"
+            android:textSize="16sp"
+            android:layout_gravity="center_vertical" />
+
+        <TextView
+            android:id="@+id/chamados"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="Chamados"
+            android:layout_marginTop="10dp"
             android:textColor="#000"
             android:textSize="16sp"
             android:layout_gravity="center_vertical" />
