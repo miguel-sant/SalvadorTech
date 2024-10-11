@@ -30,7 +30,7 @@ public class ChamadoAdapter extends RecyclerView.Adapter<ChamadoAdapter.ChamadoV
         Chamado chamado = chamadosList.get(position);
 
         // Vinculando os dados do chamado ao layout
-        holder.tituloChamado.setText(chamado.getTitulo());
+        holder.tituloChamado.setText(chamado.getDescricao());
         holder.descricaoChamado.setText(chamado.getDescricao());
     }
 
