@@ -34,10 +34,9 @@ public class DetalhamentoServicoActivity extends AppCompatActivity {
 
 
         // Captura o ID do serviço passado pela Intent
-        int idServicoValue = getIntent().getIntExtra("id", -1); // Use String para o ID
-        Query query = databaseReference.orderByChild("id").equalTo((double) idServicoValue);
-//        Log.d("DetalhamentoServico", "ID do Serviço: " + idServicoValue);
-        // Busca os dados do serviço no Firebase
+        int idServicoValue = getIntent().getIntExtra("ID_SERVICO", -1); // Use String para o ID
+        Log.d("DetalhamentoServico", "ID do Serviço: " + idServicoValue);
+//         Busca os dados do serviço no Firebase
         if (idServicoValue != -1) { // Verifica se o ID é válido
             buscarServico(idServicoValue, idServico, descricao, status, observacao, pecas);
         } else {
@@ -47,7 +46,7 @@ public class DetalhamentoServicoActivity extends AppCompatActivity {
 
     private void buscarServico(int idServicoValue, TextView idServico, TextView descricao, TextView status, TextView observacao, TextView pecas) {
         // Faz a consulta para buscar o serviço que tenha o campo "id" igual ao idServicoValue
-        Query query = databaseReference.orderByChild("id").equalTo((double) idServicoValue); // Converte para double
+        Query query = databaseReference.orderByChild("id").equalTo((double) idServicoValue);// Converte para double
 
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -62,11 +61,23 @@ public class DetalhamentoServicoActivity extends AppCompatActivity {
                         String pecasValue = servicoSnapshot.child("pecas").getValue(String.class);
 
                         // Exibe os dados nos TextViews
-                        idServico.setText("ID: " + idServicoValue);
-                        descricao.setText(descricaoValue);
-                        status.setText(statusValue);
-                        observacao.setText(observacaoValue);
-                        pecas.setText(pecasValue);
+                        idServico.setText("Serviço: " + idServicoValue);
+                        descricao.setText("Descrição: " + descricaoValue);
+                        status.setText("Status: " + statusValue);
+
+                        // Verifica se observacaoValue está vazio ou nulo
+                        if (observacaoValue == null || observacaoValue.isEmpty()) {
+                            observacao.setText("Observações: Não declarado");
+                        } else {
+                            observacao.setText("Observações: " + observacaoValue);
+                        }
+
+                        // Verifica se pecasValue está vazio ou nulo
+                        if (pecasValue == null || pecasValue.isEmpty()) {
+                            pecas.setText("Peças: Não declarado");
+                        } else {
+                            pecas.setText("Peças: " + pecasValue);
+                        }
                     }
                 } else {
                     idServico.setText("Serviço não encontrado.");

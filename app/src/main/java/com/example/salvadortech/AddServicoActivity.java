@@ -70,8 +70,8 @@ public class AddServicoActivity extends AppCompatActivity {
         // Cria um objeto Servico sem passar o ID
         Servico servico = new Servico(descricao, status, observacoes, pecas);
 
-        // Salva os dados do serviço no nó "Servicos/{serviceId}"
-        databaseReference.child(String.valueOf(servico.getId())).setValue(servico)
+        // Usa o push() para gerar um ID único
+        databaseReference.push().setValue(servico)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         Toast.makeText(AddServicoActivity.this, "Serviço adicionado com sucesso!", Toast.LENGTH_SHORT).show();

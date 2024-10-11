@@ -55,11 +55,21 @@ class HomeActivity : AppCompatActivity() {
                 // Limpar os cards existentes para evitar duplicatas
                 servicosLayout.removeAllViews()
 
-                for (servicoSnapshot in dataSnapshot.children) {
-                    val servico = servicoSnapshot.getValue(Servico::class.java)
-                    servico?.let {
-                        criarCardServico(it)
+                if (dataSnapshot.exists()) {
+                    // Se existem serviços, percorre o snapshot e cria os cards
+                    for (servicoSnapshot in dataSnapshot.children) {
+                        val servico = servicoSnapshot.getValue(Servico::class.java)
+                        servico?.let {
+                            criarCardServico(it)
+                        }
                     }
+                } else {
+                    // Se não existem serviços, mostrar a mensagem "Nenhum serviço cadastrado"
+                    val mensagemSemServicos = TextView(this@HomeActivity)
+                    mensagemSemServicos.text = "Nenhum serviço cadastrado"
+                    mensagemSemServicos.textSize = 18f
+                    mensagemSemServicos.textAlignment = View.TEXT_ALIGNMENT_CENTER
+                    servicosLayout.addView(mensagemSemServicos)
                 }
             }
 

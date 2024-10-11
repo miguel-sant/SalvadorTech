@@ -11,10 +11,7 @@ public class Servico {
     // Construtor vazio necessário para o Firebase
     public Servico() {}
 
-    private static int serviceIdCounter = 1;
-
     public Servico(String descricao, String status, String observacoes, String pecas) {
-        this.id = serviceIdCounter++; // Atribui o ID e incrementa o contador
         this.descricao = descricao;
         this.status = status;
         this.observacoes = observacoes;
