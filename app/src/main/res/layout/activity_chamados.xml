@@ -1,0 +1,165 @@
+<androidx.drawerlayout.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ChamadosActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/black">
+
+        <!-- Toolbar e top bar -->
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/black"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            android:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+        <RelativeLayout
+            android:id="@+id/top_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:padding="16dp"
+            android:background="@color/black">
+
+            <ImageView
+                android:id="@+id/menu_icon"
+                android:layout_width="33dp"
+                android:layout_height="31dp"
+                android:layout_alignParentStart="true"
+                android:contentDescription="Menu Icon"
+                android:src="@drawable/menu_hamburguer" />
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="Início"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:fontFamily="@font/roboto_bold"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/user_icon"
+                android:layout_width="41dp"
+                android:layout_height="31dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="-3dp"
+                android:contentDescription="User Icon"
+                android:src="@drawable/perfil" />
+        </RelativeLayout>
+
+        <!-- RecyclerView para exibir os chamados (serviços) -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view_chamados"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/top_bar"
+            android:padding="16dp"
+            android:layout_above="@id/bottom_navigation"
+            android:scrollbars="vertical"
+            android:clipToPadding="false"/>
+
+        <!-- Bottom Navigation -->
+        <LinearLayout
+            android:id="@+id/bottom_navigation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal"
+            android:background="@color/black"
+            android:padding="8dp"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/menu_bottom"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/historico"
+                android:contentDescription="@string/menu_bottom"
+                android:layout_weight="1" />
+
+            <ImageView
+                android:id="@+id/home_bottom"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/home"
+                android:contentDescription="Home Bottom"
+                android:layout_weight="1" />
+
+            <ImageView
+                android:id="@+id/help_bottom"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/ajuda"
+                android:contentDescription="Help Bottom"
+                android:layout_weight="1" />
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <!-- Navigation Drawer -->
+    <LinearLayout
+        android:id="@+id/nav_view"
+        android:layout_width="300dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:orientation="vertical"
+        android:background="@color/colorBackground">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColorHint="#7C7C7C7C"
+            android:hint="Do que você precisa?"
+            android:drawableStart="@drawable/search"
+            android:drawablePadding="8dp"
+            android:textColor="#000"
+            android:padding="8dp"
+            android:background="@drawable/rounded_edittext" />
+
+        <TextView
+            android:id="@+id/perfil"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="Perfil"
+            android:textColor="#000"
+            android:textSize="16sp"
+            android:layout_marginTop="40dp"
+            android:layout_gravity="center_vertical" />
+
+
+        <TextView
+            android:id="@+id/add_service_option"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="Adicionar Serviço"
+            android:layout_marginTop="10dp"
+            android:textColor="#000"
+            android:textSize="16sp"
+            android:layout_gravity="center_vertical" />
+
+        <TextView
+            android:id="@+id/chamados"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="Chamados"
+            android:layout_marginTop="10dp"
+            android:textColor="#000"
+            android:textSize="16sp"
+            android:layout_gravity="center_vertical" />
+
+    </LinearLayout>
+</androidx.drawerlayout.widget.DrawerLayout>
