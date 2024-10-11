@@ -6,16 +6,29 @@ public class Servico {
     private String status;
     private String observacoes;
     private String pecas;
-
+    private String cpfUser;
 
     // Construtor vazio necessário para o Firebase
     public Servico() {}
 
-    public Servico(String descricao, String status, String observacoes, String pecas) {
+    private static int serviceIdCounter = 1;
+
+    public Servico(String descricao, String status, String observacoes, String pecas, String cpfUser) {
+        this.id = serviceIdCounter++; // Atribui o ID e incrementa o contador
         this.descricao = descricao;
         this.status = status;
         this.observacoes = observacoes;
         this.pecas = pecas;
+        this.cpfUser = cpfUser;
+    }
+
+
+    public String getCpfUser() {
+        return cpfUser;
+    }
+
+    public void setCpfUser(String cpfUser) {
+        this.cpfUser = cpfUser;
     }
 
     // Getters e Setters

@@ -68,6 +68,16 @@
                 android:padding="16dp">
 
                 <EditText
+                    android:id="@+id/cpf_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="30px"
+                    android:hint="CPF do Cliente"
+                    android:background="@drawable/rounded_edittext"
+                    android:textColor="@android:color/black"
+                    android:textColorHint="@android:color/black" />
+
+                <EditText
                     android:id="@+id/descricao_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

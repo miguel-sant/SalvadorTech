@@ -28,55 +28,61 @@ public class DetalhamentoServicoActivity extends AppCompatActivity {
         TextView status = findViewById(R.id.status);
         TextView observacao = findViewById(R.id.observacao);
         TextView pecas = findViewById(R.id.pecas);
+        TextView nomeCliente = findViewById(R.id.nome_cliente); // Campo para exibir o nome do cliente
 
         // Inicializa a referência ao Firebase Database
         databaseReference = FirebaseDatabase.getInstance().getReference("Servicos");
-
+        databaseReference = FirebaseDatabase.getInstance().getReference("Users"); // Referência à tabela de usuários
 
         // Captura o ID do serviço passado pela Intent
-        int idServicoValue = getIntent().getIntExtra("ID_SERVICO", -1); // Use String para o ID
+        int idServicoValue = getIntent().getIntExtra("ID_SERVICO", -1);
         Log.d("DetalhamentoServico", "ID do Serviço: " + idServicoValue);
-//         Busca os dados do serviço no Firebase
-        if (idServicoValue != -1) { // Verifica se o ID é válido
-            buscarServico(idServicoValue, idServico, descricao, status, observacao, pecas);
+
+        if (idServicoValue != -1) {
+            buscarServico(idServicoValue, idServico, descricao, status, observacao, pecas, nomeCliente);
         } else {
             idServico.setText("Serviço não encontrado.");
         }
     }
 
-    private void buscarServico(int idServicoValue, TextView idServico, TextView descricao, TextView status, TextView observacao, TextView pecas) {
-        // Faz a consulta para buscar o serviço que tenha o campo "id" igual ao idServicoValue
-        Query query = databaseReference.orderByChild("id").equalTo((double) idServicoValue);// Converte para double
+    private void buscarServico(int idServicoValue, TextView idServico, TextView descricao, TextView status, TextView observacao, TextView pecas, TextView nomeCliente) {
+        // Faz a consulta para buscar o serviço pelo ID
+        Query query = databaseReference.orderByChild("id").equalTo((double) idServicoValue);
 
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                // Verifica se o serviço foi encontrado
                 if (dataSnapshot.exists()) {
                     for (DataSnapshot servicoSnapshot : dataSnapshot.getChildren()) {
-                        // Converte os dados para o modelo de serviço
+                        // Obtém os valores do serviço
                         String descricaoValue = servicoSnapshot.child("descricao").getValue(String.class);
                         String statusValue = servicoSnapshot.child("status").getValue(String.class);
                         String observacaoValue = servicoSnapshot.child("observacoes").getValue(String.class);
                         String pecasValue = servicoSnapshot.child("pecas").getValue(String.class);
+                        String cpfValue = servicoSnapshot.child("cpf").getValue(String.class); // Obtém o CPF
 
-                        // Exibe os dados nos TextViews
+                        // Exibe os dados do serviço nos TextViews
                         idServico.setText("Serviço: " + idServicoValue);
                         descricao.setText("Descrição: " + descricaoValue);
                         status.setText("Status: " + statusValue);
 
-                        // Verifica se observacaoValue está vazio ou nulo
                         if (observacaoValue == null || observacaoValue.isEmpty()) {
                             observacao.setText("Observações: Não declarado");
                         } else {
                             observacao.setText("Observações: " + observacaoValue);
                         }
 
-                        // Verifica se pecasValue está vazio ou nulo
                         if (pecasValue == null || pecasValue.isEmpty()) {
                             pecas.setText("Peças: Não declarado");
                         } else {
                             pecas.setText("Peças: " + pecasValue);
+                        }
+
+                        // Busca o nome do usuário baseado no CPF
+                        if (cpfValue != null) {
+                            buscarNomeUsuarioPorCpf(cpfValue, nomeCliente);
+                        } else {
+                            nomeCliente.setText("Nome: Não declarado");
                         }
                     }
                 } else {
@@ -86,10 +92,34 @@ public class DetalhamentoServicoActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                // Em caso de erro
                 idServico.setText("Erro ao buscar serviço: " + databaseError.getMessage());
             }
         });
     }
+
+    private void buscarNomeUsuarioPorCpf(String cpf, TextView nomeCliente) {
+        // Faz a consulta para buscar o usuário pelo CPF
+        Query query = databaseReference.orderByChild("cpf").equalTo(cpf);
+
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                        String nomeValue = userSnapshot.child("nome").getValue(String.class);
+                        nomeCliente.setText("Nome: " + nomeValue);
+                    }
+                } else {
+                    nomeCliente.setText("Nome: Não encontrado");
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                nomeCliente.setText("Erro ao buscar nome: " + databaseError.getMessage());
+            }
+        });
+    }
 }
+
 
