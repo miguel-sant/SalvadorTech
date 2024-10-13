@@ -50,19 +50,33 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun carregarServicos() {
-        databaseReference.addValueEventListener(object : ValueEventListener {
+        // Limita a consulta aos 5 serviços com os IDs mais altos
+        val query = databaseReference.orderByChild("id").limitToLast(5)
+
+        query.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 // Limpar os cards existentes para evitar duplicatas
                 servicosLayout.removeAllViews()
 
                 if (dataSnapshot.exists()) {
-                    // Se existem serviços, percorre o snapshot e cria os cards
+                    val servicosList = mutableListOf<Servico>()
+
+                    // Coleta os serviços em uma lista
                     for (servicoSnapshot in dataSnapshot.children) {
                         val servico = servicoSnapshot.getValue(Servico::class.java)
                         servico?.let {
-                            criarCardServico(it)
+                            servicosList.add(it)
                         }
                     }
+
+                    // Ordena a lista de serviços pelos IDs de forma decrescente (mais recente primeiro)
+                    servicosList.sortByDescending { it.getId() }
+
+                    // Cria os cards com os serviços ordenados
+                    for (servico in servicosList) {
+                        criarCardServico(servico)
+                    }
+
                 } else {
                     // Se não existem serviços, mostrar a mensagem "Nenhum serviço cadastrado"
                     val mensagemSemServicos = TextView(this@HomeActivity)
