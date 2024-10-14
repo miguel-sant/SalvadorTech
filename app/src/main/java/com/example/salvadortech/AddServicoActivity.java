@@ -1,7 +1,9 @@
 package com.example.salvadortech;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -63,27 +65,37 @@ public class AddServicoActivity extends AppCompatActivity {
         String status = statusSpinner.getSelectedItem().toString();
         String observacoes = inputObservacoes.getText().toString().trim();
         String pecas = inputPecas.getText().toString().trim();
-        String cpfUser = inputCpf.getText().toString().trim(); // Captura o CPF do EditText
+        String cpfUser = inputCpf.getText().toString().trim();
 
-        // Obtém o CPF do usuário autenticado
+        // Log para verificar os valores
+        Log.d("AddServicoActivity", "Descrição: " + descricao);
+        Log.d("AddServicoActivity", "Status: " + status);
+
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentUser == null) {
-
+            Log.e("AddServicoActivity", "Usuário não autenticado");
             return;
         }
 
         if (TextUtils.isEmpty(descricao) || TextUtils.isEmpty(status)) {
-
+            Log.e("AddServicoActivity", "Descrição ou status vazios");
             return;
         }
 
-        // Cria um objeto Servico
         Servico servico = new Servico(descricao, status, observacoes, pecas, cpfUser);
 
-        // Usa o push() para gerar um ID único
         databaseReference.push().setValue(servico)
                 .addOnCompleteListener(task -> {
-
+                    if (task.isSuccessful()) {
+                        Log.d("AddServicoActivity", "Serviço adicionado com sucesso");
+                        // Redirecionar para HomeActivity
+                        Intent intent = new Intent(AddServicoActivity.this, HomeActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK); // Limpa a pilha de atividades
+                        startActivity(intent);
+                        finish(); // Finaliza a atividade atual
+                    } else {
+                        Log.e("AddServicoActivity", "Falha ao adicionar serviço: " + task.getException().getMessage());
+                    }
                 });
     }
 }
