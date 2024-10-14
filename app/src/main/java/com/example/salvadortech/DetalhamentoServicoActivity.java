@@ -1,5 +1,6 @@
 package com.example.salvadortech;
 
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -7,6 +8,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.StyleSpan;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.util.Log;
@@ -23,33 +26,37 @@ public class DetalhamentoServicoActivity extends AppCompatActivity {
     private DatabaseReference servicosReference; // Referência para a tabela "Servicos"
     private DatabaseReference usersReference; // Referência para a tabela "Users"
 
+    private int idServicoValue;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detalhamento); // Certifique-se de definir o layout correto
+        setContentView(R.layout.activity_detalhamento);
 
-        // Acessa os TextViews definidos no XML
+        // Acessa os TextViews e o botão
         TextView idServico = findViewById(R.id.id_servico);
         TextView descricao = findViewById(R.id.descricao);
         TextView status = findViewById(R.id.status);
         TextView observacao = findViewById(R.id.observacao);
         TextView pecas = findViewById(R.id.pecas);
-        TextView nomeCliente = findViewById(R.id.nome_cliente); // Campo para exibir o nome do cliente
+        TextView nomeCliente = findViewById(R.id.nome_cliente);
+        Button botaoEditar = findViewById(R.id.botao_editar);
 
         // Inicializa as referências ao Firebase Database
         servicosReference = FirebaseDatabase.getInstance().getReference("Servicos");
-        usersReference = FirebaseDatabase.getInstance().getReference("Users"); // Referência à tabela de usuários
-        Log.d("FirebaseReference", "usersReference inicializada: " + (usersReference != null));
+        usersReference = FirebaseDatabase.getInstance().getReference("Users");
 
         // Captura o ID do serviço passado pela Intent
         int idServicoValue = getIntent().getIntExtra("ID_SERVICO", -1);
-        Log.d("DetalhamentoServico", "ID do Serviço: " + idServicoValue);
 
         if (idServicoValue != -1) {
             buscarServico(idServicoValue, idServico, descricao, status, observacao, pecas, nomeCliente);
         } else {
             idServico.setText("Serviço não encontrado.");
         }
+
+        // Verifica se o usuário é administrador
+        verificarUsuarioAdmin(botaoEditar);
     }
 
     private void buscarServico(int idServicoValue, TextView idServico, TextView descricao, TextView status, TextView observacao, TextView pecas, TextView nomeCliente) {
@@ -147,6 +154,50 @@ public class DetalhamentoServicoActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void verificarUsuarioAdmin(Button botaoEditar) {
+        // Supondo que você tenha o CPF do usuário logado armazenado
+        String cpfUsuarioLogado = "08562515507"; // substitua pelo CPF real do usuário logado
+
+        Query query = usersReference.orderByChild("cpf").equalTo(cpfUsuarioLogado);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.d("DetalhamentoServico", "ID do Serviço ao editar: " + idServicoValue);
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                        Integer adminValue = userSnapshot.child("admin").getValue(Integer.class);
+                        if (adminValue != null && adminValue == 1) {
+                            // Usuário é admin, mostra o botão
+                            botaoEditar.setVisibility(View.VISIBLE);
+
+
+                            botaoEditar.setOnClickListener(v -> {
+                                Log.d("DetalhamentoServico", "ID do Serviço ao editar: " + idServicoValue);
+                                Intent intent = new Intent(DetalhamentoServicoActivity.this, EditarServicoActivity.class);
+                                intent.putExtra("ID_SERVICO", idServicoValue);
+                                startActivity(intent);
+                            });
+                        } else {
+                            // Usuário não é admin, oculta o botão
+                            botaoEditar.setVisibility(View.GONE);
+                        }
+                    }
+                } else {
+                    // Se o usuário não for encontrado, oculta o botão
+                    botaoEditar.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Trate o erro, se necessário
+                Log.e("DetalhamentoServico", "Erro ao verificar admin: " + databaseError.getMessage());
+                botaoEditar.setVisibility(View.GONE);
+            }
+        });
+    }
+
 }
 
 
