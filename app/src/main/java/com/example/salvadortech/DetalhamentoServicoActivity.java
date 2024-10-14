@@ -10,6 +10,10 @@ import android.text.Spanned;
 import android.text.style.StyleSpan;
 import android.view.View;
 import android.widget.Button;
+
+import android.os.Bundle;
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.widget.TextView;
 import android.widget.Toast;
 import android.util.Log;
@@ -49,6 +53,10 @@ public class DetalhamentoServicoActivity extends AppCompatActivity {
         // Captura o ID do serviço passado pela Intent
         int idServicoValue = getIntent().getIntExtra("ID_SERVICO", -1);
 
+        String origemTela = getIntent().getStringExtra("ORIGEM_TELA");
+
+        Log.d("DetalhamentoServico", "ID do Serviço: " + idServicoValue);
+
         if (idServicoValue != -1) {
             buscarServico(idServicoValue, idServico, descricao, status, observacao, pecas, nomeCliente);
         } else {
@@ -80,30 +88,17 @@ public class DetalhamentoServicoActivity extends AppCompatActivity {
                         descricao.setText("Descrição: " + descricaoValue);
                         status.setText("Status: " + statusValue);
 
-                        String observacaoText;
                         if (observacaoValue == null || observacaoValue.isEmpty()) {
-                            observacaoText = "Observações do técnico: Não declarado";
+                            observacao.setText("Observações: Não declarado");
                         } else {
-                            observacaoText = "Observações do técnico: " + observacaoValue;
+                            observacao.setText("Observações: " + observacaoValue);
                         }
 
-                        SpannableString spannableObservacao = new SpannableString(observacaoText);
-                        spannableObservacao.setSpan(new StyleSpan(Typeface.BOLD), 0, 24, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE); // 25 é o comprimento do texto "Observações do técnico: "
-
-                        observacao.setText(spannableObservacao);
-
-                        String pecasText;
                         if (pecasValue == null || pecasValue.isEmpty()) {
-                            pecasText = "Peças necessárias ou substituídas: Não declarado";
+                            pecas.setText("Peças: Não declarado");
                         } else {
-                            pecasText = "Peças necessárias ou substituídas: " + pecasValue;
+                            pecas.setText("Peças: " + pecasValue);
                         }
-
-                        SpannableString spannablePecas = new SpannableString(pecasText);
-                        spannablePecas.setSpan(new StyleSpan(Typeface.BOLD), 0, 33, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE); // 33 é o comprimento do texto "Peças necessárias ou substituídas: "
-
-                        pecas.setText(spannablePecas);
-
 
                         // Busca o nome do usuário baseado no CPF
                         if (cpfValue != null) {

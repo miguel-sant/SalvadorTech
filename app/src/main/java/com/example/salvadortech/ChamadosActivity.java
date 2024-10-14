@@ -1,24 +1,17 @@
 package com.example.salvadortech;
 
+import android.content.Intent;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import android.util.Log;
 import android.widget.Toast;
-
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
-
+import android.util.Log;
+import com.google.firebase.database.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ChamadosActivity extends AppCompatActivity {
-
     private RecyclerView recyclerView;
     private ChamadoAdapter adapter;
     private List<Chamado> chamadosList;
@@ -39,30 +32,36 @@ public class ChamadosActivity extends AppCompatActivity {
         // Inicializa a referência ao Firebase Database
         databaseReference = FirebaseDatabase.getInstance().getReference("Servicos");
 
+        // Configura o clique no item do RecyclerView
+        adapter.setOnItemClickListener(new ChamadoAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(Chamado chamado) {
+                Intent intent = new Intent(ChamadosActivity.this, DetalhamentoServicoActivity.class);
+                intent.putExtra("ID_SERVICO", chamado.getId());
+                startActivity(intent);
+            }
+        });
+
         // Busca os dados dos serviços no Firebase
         buscarChamados();
     }
 
     private void buscarChamados() {
-        // Faz a consulta para buscar todos os chamados
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                // Verifica se há chamados disponíveis
                 if (dataSnapshot.exists()) {
                     for (DataSnapshot chamadoSnapshot : dataSnapshot.getChildren()) {
-                        // Converte os dados para o modelo de chamado
-                        Long id = chamadoSnapshot.child("id").getValue(Long.class); // Use Long aqui
+                        Long id = chamadoSnapshot.child("id").getValue(Long.class);
                         String descricao = chamadoSnapshot.child("descricao").getValue(String.class);
                         String status = chamadoSnapshot.child("status").getValue(String.class);
                         String observacoes = chamadoSnapshot.child("observacoes").getValue(String.class);
                         String pecas = chamadoSnapshot.child("pecas").getValue(String.class);
 
-                        // Adiciona o chamado à lista
-                        Chamado chamado = new Chamado(id, descricao, status, observacoes, pecas); // Certifique-se de que a ordem está correta
+                        Chamado chamado = new Chamado(id, descricao, status, observacoes, pecas);
                         chamadosList.add(chamado);
                     }
-                    adapter.notifyDataSetChanged(); // Atualiza o RecyclerView
+                    adapter.notifyDataSetChanged();
                 } else {
                     Toast.makeText(ChamadosActivity.this, "Nenhum chamado encontrado.", Toast.LENGTH_SHORT).show();
                 }
@@ -70,7 +69,6 @@ public class ChamadosActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                // Em caso de erro
                 Log.e("ChamadosActivity", "Erro ao buscar chamados: " + databaseError.getMessage());
                 Toast.makeText(ChamadosActivity.this, "Erro ao buscar chamados.", Toast.LENGTH_SHORT).show();
             }

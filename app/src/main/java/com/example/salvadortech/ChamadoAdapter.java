@@ -11,27 +11,31 @@ import java.util.List;
 public class ChamadoAdapter extends RecyclerView.Adapter<ChamadoAdapter.ChamadoViewHolder> {
 
     private List<Chamado> chamadosList;
+    private OnItemClickListener listener;
 
-    public ChamadoAdapter(List<Chamado> chamados) {
-        this.chamadosList = chamados;
+    public interface OnItemClickListener {
+        void onItemClick(Chamado chamado);
     }
 
-    @NonNull
-    @Override
-    public ChamadoViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        // Inflando o layout do item de chamado
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_chamado, parent, false);
-        return new ChamadoViewHolder(view);
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
+    }
+
+    public ChamadoAdapter(List<Chamado> chamadosList) {
+        this.chamadosList = chamadosList;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ChamadoViewHolder holder, int position) {
-        // Obtendo o item de chamado atual da lista
+    public ChamadoViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_chamado, parent, false);
+        return new ChamadoViewHolder(itemView);
+    }
+
+    @Override
+    public void onBindViewHolder(ChamadoViewHolder holder, int position) {
         Chamado chamado = chamadosList.get(position);
-
-        // Vinculando os dados do chamado ao layout
-        holder.tituloChamado.setText(chamado.getDescricao());
-        holder.descricaoChamado.setText(chamado.getDescricao());
+        holder.titleTextView.setText(chamado.getDescricao());
+        holder.statusTextView.setText(chamado.getStatus());
     }
 
     @Override
@@ -39,17 +43,23 @@ public class ChamadoAdapter extends RecyclerView.Adapter<ChamadoAdapter.ChamadoV
         return chamadosList.size();
     }
 
-    // ViewHolder para gerenciar o layout do item
-    public static class ChamadoViewHolder extends RecyclerView.ViewHolder {
+    public class ChamadoViewHolder extends RecyclerView.ViewHolder {
+        public TextView titleTextView, statusTextView;
 
-        TextView tituloChamado, descricaoChamado;
+        public ChamadoViewHolder(View view) {
+            super(view);
+            titleTextView = view.findViewById(R.id.card_title);
+            statusTextView = view.findViewById(R.id.card_status);
 
-        public ChamadoViewHolder(@NonNull View itemView) {
-            super(itemView);
-            // Ligando os TextViews do layout ao código
-            tituloChamado = itemView.findViewById(R.id.tv_titulo_chamado);
-            descricaoChamado = itemView.findViewById(R.id.tv_descricao_chamado);
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    if (listener != null && position != RecyclerView.NO_POSITION) {
+                        listener.onItemClick(chamadosList.get(position));
+                    }
+                }
+            });
         }
     }
 }
-

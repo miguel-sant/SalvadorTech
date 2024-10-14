@@ -12,7 +12,7 @@
         android:padding="16dp">
 
         <TextView
-            android:id="@+id/tv_titulo_chamado"
+            android:id="@+id/card_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Título do Chamado"
@@ -21,13 +21,12 @@
             android:textColor="@android:color/black" />
 
         <TextView
-            android:id="@+id/tv_descricao_chamado"
+            android:id="@+id/card_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/tv_titulo_chamado"
             android:text="Descrição do chamado"
             android:textColor="@android:color/darker_gray"
-            android:layout_marginTop="4dp"/>
+            android:layout_marginTop="34dp"/>
 
     </RelativeLayout>
 
