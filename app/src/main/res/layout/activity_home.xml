@@ -309,5 +309,16 @@
             android:textSize="16sp"
             android:layout_gravity="center_vertical" />
 
+        <TextView
+            android:id="@+id/cadastrar_funcionario"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="Cadastrar Funcionário"
+            android:layout_marginTop="10dp"
+            android:textColor="#000"
+            android:textSize="16sp"
+            android:layout_gravity="center_vertical" />
+
     </LinearLayout>
 </androidx.drawerlayout.widget.DrawerLayout>

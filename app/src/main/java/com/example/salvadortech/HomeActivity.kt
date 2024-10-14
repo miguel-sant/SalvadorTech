@@ -2,6 +2,7 @@ package com.example.salvadortech
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -10,17 +11,22 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
-
 import android.view.LayoutInflater
 import android.view.View
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
-
 
 class HomeActivity : AppCompatActivity() {
 
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var databaseReference: DatabaseReference
     private lateinit var servicosLayout: LinearLayout
+
+    // Variável para armazenar o status de admin
+    private var isAdmin: Boolean = false
+
+    // Firebase Auth para capturar o usuário autenticado
+    private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +38,9 @@ class HomeActivity : AppCompatActivity() {
         databaseReference = FirebaseDatabase.getInstance().getReference("Servicos")
         servicosLayout = findViewById(R.id.card_servico) // Layout onde os cards serão adicionados
 
+        // Inicializa o Firebase Auth
+        auth = FirebaseAuth.getInstance()
+
         // Chama o método para carregar serviços
         carregarServicos()
 
@@ -41,57 +50,189 @@ class HomeActivity : AppCompatActivity() {
             drawerLayout.openDrawer(GravityCompat.START)
         }
 
-        // Configurar o clique para abrir outra Activity ao clicar no TextView "Adicionar Serviço"
+        // Configurar cliques para as opções do menu
         val addServiceOption: TextView = findViewById(R.id.add_service_option)
         addServiceOption.setOnClickListener {
             val intent = Intent(this, AddServicoActivity::class.java)
             startActivity(intent)
         }
+
+        val cadastrarFunc: TextView = findViewById(R.id.cadastrar_funcionario)
+        cadastrarFunc.setOnClickListener {
+            val intent = Intent(this, CadastroFuncionarioActivity::class.java)
+            startActivity(intent)
+        }
+
+        // Verifica se o usuário é admin ao carregar a tela
+        verificarAdminStatus()
     }
 
-    private fun carregarServicos() {
-        // Limita a consulta aos 5 serviços com os IDs mais altos
-        val query = databaseReference.orderByChild("id").limitToLast(5)
+    private fun verificarAdminStatus() {
+        // Obtém o usuário atual
+        val currentUser = auth.currentUser
+        currentUser?.let {
+            val userId = it.uid
 
-        query.addValueEventListener(object : ValueEventListener {
+            val userReference = FirebaseDatabase.getInstance().getReference("Users/$userId")
+            userReference.child("admin").addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        // Verifica se o valor é 1 ou 0
+                        val adminValue = dataSnapshot.getValue(Int::class.java) ?: 0
+                        isAdmin = adminValue == 1 // Verifica se o valor é 1
+                        atualizarVisibilidadeMenu()
+
+                        // Chama carregarServicos aqui, após definir isAdmin
+                        carregarServicos() // Chamada para carregar os serviços com base no status de admin
+                    } else {
+                        Toast.makeText(this@HomeActivity, "Usuário não encontrado.", Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+                override fun onCancelled(databaseError: DatabaseError) {
+                    Toast.makeText(this@HomeActivity, "Erro ao verificar status de administrador.", Toast.LENGTH_SHORT).show()
+                }
+            })
+        } ?: run {
+            Toast.makeText(this, "Usuário não autenticado.", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+
+    private fun atualizarVisibilidadeMenu() {
+
+        val addServiceOption: TextView = findViewById(R.id.add_service_option)
+        val cadastrarFunc: TextView = findViewById(R.id.cadastrar_funcionario)
+        val chamados: TextView = findViewById(R.id.chamados)
+
+        if (isAdmin) {
+            addServiceOption.visibility = View.VISIBLE
+            cadastrarFunc.visibility = View.VISIBLE
+            chamados.visibility = View.VISIBLE
+        } else {
+            addServiceOption.visibility = View.GONE
+            cadastrarFunc.visibility = View.GONE
+            chamados.visibility = View.GONE
+        }
+
+        Log.d("HomeActivity", "isAdmin: $isAdmin")
+    }
+    private fun getUserCpf(userId: String, callback: (String?) -> Unit) {
+        val userReference = FirebaseDatabase.getInstance().getReference("Users/$userId")
+        userReference.child("cpf").addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                // Limpar os cards existentes para evitar duplicatas
-                servicosLayout.removeAllViews()
-
                 if (dataSnapshot.exists()) {
-                    val servicosList = mutableListOf<Servico>()
-
-                    // Coleta os serviços em uma lista
-                    for (servicoSnapshot in dataSnapshot.children) {
-                        val servico = servicoSnapshot.getValue(Servico::class.java)
-                        servico?.let {
-                            servicosList.add(it)
-                        }
-                    }
-
-                    // Ordena a lista de serviços pelos IDs de forma decrescente (mais recente primeiro)
-                    servicosList.sortByDescending { it.getId() }
-
-                    // Cria os cards com os serviços ordenados
-                    for (servico in servicosList) {
-                        criarCardServico(servico)
-                    }
-
+                    val cpf = dataSnapshot.getValue(String::class.java)
+                    callback(cpf)
                 } else {
-                    // Se não existem serviços, mostrar a mensagem "Nenhum serviço cadastrado"
-                    val mensagemSemServicos = TextView(this@HomeActivity)
-                    mensagemSemServicos.text = "Nenhum serviço cadastrado"
-                    mensagemSemServicos.textSize = 18f
-                    mensagemSemServicos.textAlignment = View.TEXT_ALIGNMENT_CENTER
-                    servicosLayout.addView(mensagemSemServicos)
+                    callback(null)
                 }
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
-                Toast.makeText(this@HomeActivity, "Erro ao carregar serviços.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@HomeActivity, "Erro ao obter o CPF do usuário.", Toast.LENGTH_SHORT).show()
+                callback(null)
             }
         })
     }
+
+    private fun carregarServicos() {
+        val currentUser = auth.currentUser
+        currentUser?.let { user ->
+            val userId = user.uid
+            getUserCpf(userId) { userCpf ->
+                if (userCpf != null) {
+                    val userReference = FirebaseDatabase.getInstance().getReference("Users/$userId")
+
+                    // Verifica se o usuário é um administrador
+                    userReference.child("admin").addListenerForSingleValueEvent(object : ValueEventListener {
+                        override fun onDataChange(dataSnapshot: DataSnapshot) {
+                            if (dataSnapshot.exists()) {
+                                val adminValue = dataSnapshot.getValue(Int::class.java) ?: 0
+                                val isAdmin = adminValue == 1
+                                atualizarVisibilidadeMenu() // Atualiza a visibilidade do menu
+
+                                if (isAdmin) {
+                                    // Carrega os serviços para o administrador
+                                    val query = databaseReference.orderByChild("id").limitToLast(5)
+                                    query.addValueEventListener(object : ValueEventListener {
+                                        override fun onDataChange(dataSnapshot: DataSnapshot) {
+                                            servicosLayout.removeAllViews()
+                                            if (dataSnapshot.exists()) {
+                                                val servicosList = mutableListOf<Servico>()
+                                                for (servicoSnapshot in dataSnapshot.children) {
+                                                    val servico = servicoSnapshot.getValue(Servico::class.java)
+                                                    servico?.let { servicosList.add(it) }
+                                                }
+                                                servicosList.sortByDescending { it.getId() }
+                                                for (servico in servicosList) {
+                                                    criarCardServico(servico)
+                                                }
+                                            } else {
+                                                mostrarMensagemSemServicos()
+                                            }
+                                        }
+
+                                        override fun onCancelled(databaseError: DatabaseError) {
+                                            Toast.makeText(this@HomeActivity, "Erro ao carregar serviços.", Toast.LENGTH_SHORT).show()
+                                        }
+                                    })
+                                } else {
+                                    // Carrega os serviços para usuários não administradores
+                                    val userServicosQuery = databaseReference.orderByChild("cpfUser").equalTo(userCpf).limitToLast(5)
+                                    userServicosQuery.addValueEventListener(object : ValueEventListener {
+                                        override fun onDataChange(dataSnapshot: DataSnapshot) {
+                                            servicosLayout.removeAllViews()
+                                            if (dataSnapshot.exists()) {
+                                                val servicosList = mutableListOf<Servico>()
+                                                for (servicoSnapshot in dataSnapshot.children) {
+                                                    val servico = servicoSnapshot.getValue(Servico::class.java)
+                                                    servico?.let { servicosList.add(it) }
+                                                }
+                                                servicosList.sortByDescending { it.getId() }
+                                                for (servico in servicosList) {
+                                                    criarCardServico(servico)
+                                                }
+                                            } else {
+                                                mostrarMensagemSemServicos()
+                                            }
+                                        }
+
+                                        override fun onCancelled(databaseError: DatabaseError) {
+                                            Toast.makeText(this@HomeActivity, "Erro ao carregar serviços.", Toast.LENGTH_SHORT).show()
+                                        }
+                                    })
+                                }
+                            } else {
+                                Toast.makeText(this@HomeActivity, "Usuário não encontrado.", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+
+                        override fun onCancelled(databaseError: DatabaseError) {
+                            Toast.makeText(this@HomeActivity, "Erro ao verificar status de administrador.", Toast.LENGTH_SHORT).show()
+                        }
+                    })
+                } else {
+                    Toast.makeText(this@HomeActivity, "Erro ao obter CPF do usuário.", Toast.LENGTH_SHORT).show()
+                }
+            }
+        } ?: run {
+            Toast.makeText(this, "Usuário não autenticado.", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+
+
+
+
+    private fun mostrarMensagemSemServicos() {
+        val mensagemSemServicos = TextView(this@HomeActivity)
+        mensagemSemServicos.text = "Nenhum serviço cadastrado"
+        mensagemSemServicos.textSize = 18f
+        mensagemSemServicos.textAlignment = View.TEXT_ALIGNMENT_CENTER
+        servicosLayout.addView(mensagemSemServicos)
+    }
+
 
     private fun criarCardServico(servico: Servico) {
         // Inflar o layout do card

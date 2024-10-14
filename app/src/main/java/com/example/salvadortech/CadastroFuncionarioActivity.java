@@ -1,19 +1,25 @@
 package com.example.salvadortech;
-import android.database.Cursor;
 
 import android.os.Bundle;
-import android.widget.EditText;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
-import android.util.Log;
+
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class CadastroFuncionarioActivity extends AppCompatActivity {
 
-    private EditText editTextNome, editTextEmail, editTextCpf, editPasswordPassword;
+    private EditText editTextNome, editTextEmail, editTextCpf, editTextPassword, editTextRepeatPassword;
     private Button buttonCadastrar;
-    private DataBaseFuncionario dbFuncionario;
+    private FirebaseAuth mAuth;
+    private DatabaseReference databaseReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,10 +29,14 @@ public class CadastroFuncionarioActivity extends AppCompatActivity {
         editTextNome = findViewById(R.id.editTextNome);
         editTextEmail = findViewById(R.id.editTextEmail);
         editTextCpf = findViewById(R.id.editTextCpf);
-        editPasswordPassword = findViewById(R.id.editPasswordPassword);
+        editTextPassword = findViewById(R.id.editPasswordPassword);
+        editTextRepeatPassword = findViewById(R.id.editConfirmPassword); // Adicione este campo no XML
         buttonCadastrar = findViewById(R.id.buttonCadastrar);
 
-        dbFuncionario = new DataBaseFuncionario(this);
+        // Inicializar Firebase Auth
+        mAuth = FirebaseAuth.getInstance();
+        // Inicializar Realtime Database
+        databaseReference = FirebaseDatabase.getInstance().getReference("Users");
 
         buttonCadastrar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -37,41 +47,51 @@ public class CadastroFuncionarioActivity extends AppCompatActivity {
     }
 
     private void cadastrarFuncionario() {
-        String nome = editTextNome.getText().toString();
-        String email = editTextEmail.getText().toString();
-        String cpf = editTextCpf.getText().toString();
-        String senha = editPasswordPassword.getText().toString();
+        String nome = editTextNome.getText().toString().trim();
+        String email = editTextEmail.getText().toString().trim();
+        String cpf = editTextCpf.getText().toString().trim();
+        String senha = editTextPassword.getText().toString().trim();
+        String repetirSenha = editTextRepeatPassword.getText().toString().trim();
 
-        if (nome.isEmpty() || email.isEmpty() || cpf.isEmpty() || senha.isEmpty()) {
+        if (TextUtils.isEmpty(nome) || TextUtils.isEmpty(email) || TextUtils.isEmpty(cpf) || TextUtils.isEmpty(senha) || TextUtils.isEmpty(repetirSenha)) {
             Toast.makeText(this, "Por favor, preencha todos os campos.", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        boolean isInserted = dbFuncionario.addFuncionario(nome, email, cpf, senha);
-
-        if (isInserted) {
-            Toast.makeText(this, "Funcionário cadastrado com sucesso!", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(this, "Erro ao cadastrar funcionário.", Toast.LENGTH_SHORT).show();
+        if (!senha.equals(repetirSenha)) {
+            Toast.makeText(this, "As senhas não coincidem.", Toast.LENGTH_SHORT).show();
+            return;
         }
 
-        visualizarFuncionarios(); // Chamada para visualizar os dados cadastrados
+        // Tenta criar o usuário no Firebase Authentication
+        mAuth.createUserWithEmailAndPassword(email, senha)
+                .addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful()) {
+                        // Cadastro bem-sucedido, salva os dados no Realtime Database
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        salvarDadosFuncionario(user, nome, cpf, email); // Chama o método para salvar os dados
+                    } else {
+                        // Exibe a mensagem de erro
+                        Toast.makeText(CadastroFuncionarioActivity.this, "Falha ao criar usuário: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
-    private void visualizarFuncionarios() {
-        Cursor cursor = dbFuncionario.getAllFuncionarios();
-        StringBuilder builder = new StringBuilder();
+    private void salvarDadosFuncionario(FirebaseUser user, String nome, String cpf, String email) {
+        if (user == null) return;
 
-        while (cursor.moveToNext()) {
-            String nome = cursor.getString(cursor.getColumnIndex("nome_completo"));
-            String email = cursor.getString(cursor.getColumnIndex("email"));
-            String cpf = cursor.getString(cursor.getColumnIndex("cpf"));
-            builder.append("Nome: ").append(nome).append(", Email: ").append(email).append(", CPF: ").append(cpf).append("\n");
-        }
+        // Cria um objeto User com o valor de is_admin igual a 1 (é admin)
+        User funcionario = new User(nome, cpf, email, 1); // Atribui 1 para is_admin
 
-        cursor.close();
-
-        // Exiba no Log para verificar os dados
-        Log.d("FUNCIONARIOS", builder.toString());
+        // Salva os dados do usuário no nó "Users/{userId}"
+        databaseReference.child(user.getUid()).setValue(funcionario)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Toast.makeText(CadastroFuncionarioActivity.this, "Cadastro de funcionário realizado com sucesso!", Toast.LENGTH_SHORT).show();
+                        finish(); // Finaliza a activity
+                    } else {
+                        Toast.makeText(CadastroFuncionarioActivity.this, "Falha ao salvar dados do funcionário.", Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 }
