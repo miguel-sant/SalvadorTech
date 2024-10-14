@@ -146,7 +146,7 @@
                         android:textStyle="normal"
                         android:text="@string/pecas"/>
 
-                    
+
                 </LinearLayout>
 
                 <Button
