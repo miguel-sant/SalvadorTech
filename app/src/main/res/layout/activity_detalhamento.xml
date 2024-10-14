@@ -68,6 +68,13 @@
                 android:orientation="vertical"
                 android:padding="16dp">
 
+                <Button
+                    android:id="@+id/botao_editar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Editar"
+                    android:visibility="gone" />
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -140,12 +147,15 @@
                         android:textStyle="normal"
                         android:text="@string/pecas"/>
 
-
-
-
-
-
+                    
                 </LinearLayout>
+
+                <Button
+                    android:id="@+id/botao_salvar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Editar"
+                    android:visibility="gone" />
 
 
             </LinearLayout>

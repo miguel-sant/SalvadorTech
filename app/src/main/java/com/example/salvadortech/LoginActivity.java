@@ -49,9 +49,9 @@ public class LoginActivity extends AppCompatActivity {
                                     if (task.isSuccessful()) {
                                         abrirTelaPrincipal(); // Chama método para abrir a tela principal
                                     } else {
+                                        String error = task.getException() != null ? task.getException().getMessage() : "Erro desconhecido";
+                                        Toast.makeText(LoginActivity.this, error, Toast.LENGTH_SHORT).show();
                                     }
-                                    String error = task.getException() != null ? task.getException().getMessage() : "Erro desconhecido";
-                                    Toast.makeText(LoginActivity.this, error, Toast.LENGTH_SHORT).show();
                                 }
                             });
                 } else {
