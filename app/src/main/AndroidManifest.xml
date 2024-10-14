@@ -17,26 +17,20 @@
 
         <activity android:name=".AddServicoActivity"
             android:exported="true" />
-
         <activity
             android:name=".DetalhamentoServicoActivity"
             android:exported="true" />
-
         <activity android:name=".EsqueceuSenhaActivity"
             android:exported="true" />
-
         <activity
             android:name=".HomeActivity"
             android:label="@string/app_name"
             android:exported="true">
-
         </activity>
-
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
             android:exported="true" />
-
         <activity
             android:name=".LoginActivity"
             android:label="@string/app_name"
@@ -46,21 +40,33 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".CadastroFuncionarioActivity"
             android:exported="true" />
-
         <activity
             android:name=".SalvadorTechActivity"
             android:exported="true"
             android:theme="@style/Theme.AppCompat.Light">
             <!-- Remover o intent-filter para esta atividade -->
         </activity>
-
         <activity
             android:name=".CadastroUsuarioActivity"
             android:exported="true">
         </activity>
+        <activity
+            android:name=".FaqActivity"
+            android:exported="true">
+        </activity>
+
+        <activity android:name=".ProfileActivity"
+            android:exported="true"/>
+        <activity android:name=".SettingsActivity"
+            android:exported="true"/>
+        <activity android:name=".HelpActivity"
+            android:exported="true"/>
+
+        <activity android:name=".ChamadosActivity"
+            android:exported="true"/>
+
     </application>
 </manifest>

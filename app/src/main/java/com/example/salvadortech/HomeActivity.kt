@@ -12,7 +12,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import android.view.LayoutInflater
+import android.view.MenuInflater
 import android.view.View
+import android.widget.PopupMenu
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 
@@ -63,11 +65,47 @@ class HomeActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        // Verifica se o usuário é admin ao carregar a tela
+        val faq: ImageView = findViewById(R.id.faq)
+        faq.setOnClickListener {
+            val intent = Intent(this, FaqActivity::class.java)
+            startActivity(intent)
+        }
+
+        val chamados: TextView = findViewById(R.id.chamados)
+        chamados.setOnClickListener {
+            val intent = Intent(this, ChamadosActivity::class.java)
+            startActivity(intent)
+        }
+            // Verifica se o usuário é admin ao carregar a tela
         verificarAdminStatus()
     }
 
-    private fun verificarAdminStatus() {
+
+    fun showProfileMenu(view: View) {
+        val popup = PopupMenu(this, view)
+        val inflater: MenuInflater = popup.menuInflater
+        inflater.inflate(R.menu.menu_profile, popup.menu)
+        popup.setOnMenuItemClickListener { item: MenuItem ->
+            when (item.itemId) {
+
+                R.id.action_logout -> {
+                    logout()
+                    true
+                }
+
+                else -> false
+            }
+        }
+        popup.show()
+    }
+        private fun logout() {
+        FirebaseAuth.getInstance().signOut()
+        val intent = Intent(this, LoginActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(intent)
+        finish()
+    }
+        private fun verificarAdminStatus() {
         // Obtém o usuário atual
         val currentUser = auth.currentUser
         currentUser?.let {

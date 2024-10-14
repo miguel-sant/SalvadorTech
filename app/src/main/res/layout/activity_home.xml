@@ -47,13 +47,15 @@
                 android:textStyle="bold" />
 
             <ImageView
-                android:id="@+id/user_icon"
+                android:id="@+id/profile_icon"
                 android:layout_width="41dp"
                 android:layout_height="31dp"
                 android:layout_alignParentEnd="true"
                 android:layout_marginEnd="-3dp"
                 android:contentDescription="User Icon"
-                android:src="@drawable/perfil" />
+                android:src="@drawable/perfil"
+                android:onClick="showProfileMenu" />
+
         </RelativeLayout>
 
         <ScrollView
@@ -68,153 +70,6 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:padding="16dp">
-
-<!--                <LinearLayout-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:orientation="vertical"-->
-<!--                    android:background="@drawable/rounded_background"-->
-<!--                    android:padding="8dp"-->
-<!--                    android:layout_marginTop="25dp"-->
-<!--                    android:layout_marginBottom="16dp"-->
-<!--                    android:clickable="true"-->
-<!--                    android:focusable="true">-->
-
-<!--                    <ImageView-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="200dp"-->
-<!--                        android:src="@drawable/computador"-->
-<!--                        android:contentDescription="Item Image"-->
-<!--                        android:scaleType="fitCenter"-->
-<!--                        android:adjustViewBounds="true" />-->
-
-<!--                    <TextView-->
-<!--                        android:id="@+id/card_title"-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:text="Título do Serviço"-->
-<!--                        android:textSize="18sp"-->
-<!--                        android:padding="8dp"-->
-<!--                        android:textColor="@color/white"-->
-<!--                        android:fontFamily="@font/roboto_bold" />-->
-
-<!--                    <TextView-->
-<!--                        android:id="@+id/card_status"-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:text="Status"-->
-<!--                        android:textSize="14sp"-->
-<!--                        android:paddingStart="8dp"-->
-<!--                        android:paddingBottom="8dp"-->
-<!--                        android:fontFamily="@font/roboto_bold"-->
-<!--                        android:textColor="@color/white" />-->
-
-<!--                </LinearLayout>-->
-
-<!--                <LinearLayout-->
-<!--                    android:id="@+id/three_cards_layout"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:orientation="horizontal"-->
-<!--                    android:gravity="center"-->
-<!--                    android:layout_marginBottom="16dp">-->
-
-<!--                    <LinearLayout-->
-<!--                        android:layout_width="0dp"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:layout_weight="1"-->
-<!--                        android:orientation="vertical"-->
-<!--                        android:background="@drawable/rounded_background"-->
-<!--                        android:padding="8dp"-->
-<!--                        android:layout_margin="4dp"-->
-<!--                        android:clickable="true"-->
-<!--                        android:focusable="true"-->
-<!--                        android:gravity="center">-->
-<!--                        <ImageView-->
-<!--                            android:layout_width="match_parent"-->
-<!--                            android:layout_height="55dp"-->
-<!--                            android:src="@drawable/consultar"-->
-<!--                            android:contentDescription="Small Card Image 1"-->
-<!--                            android:scaleType="fitCenter"-->
-<!--                            android:adjustViewBounds="true"-->
-<!--                            android:layout_gravity="center" />-->
-
-<!--                        <TextView-->
-<!--                            android:layout_width="wrap_content"-->
-<!--                            android:layout_height="wrap_content"-->
-<!--                            android:text="Consultar"-->
-<!--                            android:textSize="14sp"-->
-<!--                            android:padding="4dp"-->
-<!--                            android:textColor="@color/white"-->
-<!--                            android:fontFamily="@font/roboto_bold"-->
-<!--                            android:letterSpacing="0.05" />-->
-<!--                    </LinearLayout>-->
-
-<!--                    <LinearLayout-->
-<!--                        android:layout_width="0dp"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:layout_weight="1"-->
-<!--                        android:orientation="vertical"-->
-<!--                        android:background="@drawable/rounded_background"-->
-<!--                        android:padding="8dp"-->
-<!--                        android:layout_margin="4dp"-->
-<!--                        android:clickable="true"-->
-<!--                        android:focusable="true"-->
-<!--                        android:gravity="center">-->
-
-<!--                        <ImageView-->
-<!--                            android:layout_width="match_parent"-->
-<!--                            android:layout_height="55dp"-->
-<!--                            android:src="@drawable/icon_edit"-->
-<!--                            android:contentDescription="Small Card Image 2"-->
-<!--                            android:scaleType="fitCenter"-->
-<!--                            android:adjustViewBounds="true"-->
-<!--                            android:layout_gravity="center" />-->
-
-<!--                        <TextView-->
-<!--                            android:layout_width="wrap_content"-->
-<!--                            android:layout_height="wrap_content"-->
-<!--                            android:text="Editar"-->
-<!--                            android:textSize="14sp"-->
-<!--                            android:padding="4dp"-->
-<!--                            android:textColor="@color/white"-->
-<!--                            android:fontFamily="@font/roboto_bold"-->
-<!--                            android:letterSpacing="0.05" />-->
-<!--                    </LinearLayout>-->
-
-<!--                    <LinearLayout-->
-<!--                        android:layout_width="0dp"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:layout_weight="1"-->
-<!--                        android:orientation="vertical"-->
-<!--                        android:background="@drawable/rounded_background"-->
-<!--                        android:padding="8dp"-->
-<!--                        android:layout_margin="4dp"-->
-<!--                        android:clickable="true"-->
-<!--                        android:focusable="true"-->
-<!--                        android:gravity="center">-->
-
-<!--                        <ImageView-->
-<!--                            android:layout_width="match_parent"-->
-<!--                            android:layout_height="55dp"-->
-<!--                            android:src="@drawable/icon_excluir"-->
-<!--                            android:contentDescription="Small Card Image 3"-->
-<!--                            android:scaleType="fitCenter"-->
-<!--                            android:adjustViewBounds="true"-->
-<!--                            android:layout_gravity="center" />-->
-
-<!--                        <TextView-->
-<!--                            android:layout_width="wrap_content"-->
-<!--                            android:layout_height="wrap_content"-->
-<!--                            android:text="Excluir"-->
-<!--                            android:textSize="14sp"-->
-<!--                            android:padding="4dp"-->
-<!--                            android:textColor="@color/white"-->
-<!--                            android:fontFamily="@font/roboto_bold"-->
-<!--                            android:letterSpacing="0.05" />-->
-<!--                    </LinearLayout>-->
-
-<!--                </LinearLayout>-->
 
             </LinearLayout>
         </ScrollView>
@@ -246,15 +101,16 @@
                 android:layout_weight="1" />
 
             <ImageView
-                android:id="@+id/help_bottom"
+                android:id="@+id/faq"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:src="@drawable/ajuda"
-                android:contentDescription="Help Bottom"
+                android:contentDescription="Faq Bottom"
                 android:layout_weight="1" />
         </LinearLayout>
 
     </RelativeLayout>
+
 
     <LinearLayout
         android:id="@+id/nav_view"
@@ -262,63 +118,53 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:orientation="vertical"
-        android:background="@color/colorBackground">
+        android:background="@color/colorBackground"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
 
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColorHint="#7C7C7C7C"
-            android:hint="Do que você precisa?"
-            android:drawableStart="@drawable/search"
-            android:drawablePadding="8dp"
-            android:textColor="#000"
-            android:padding="8dp"
-            android:background="@drawable/rounded_edittext" />
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColorHint="#7C7C7C7C"
+        android:hint="Do que você precisa?"
+        android:drawableStart="@drawable/search"
+        android:drawablePadding="8dp"
+        android:textColor="#000"
+        android:padding="8dp"
+        android:background="@drawable/rounded_edittext" />
 
-        <TextView
-            android:id="@+id/perfil"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:text="Perfil"
-            android:textColor="#000"
-            android:textSize="16sp"
-            android:layout_marginTop="40dp"
-            android:layout_gravity="center_vertical" />
+    <TextView
+        android:id="@+id/add_service_option"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="Adicionar Serviço"
+        android:layout_marginTop="10dp"
+        android:textColor="#000"
+        android:textSize="16sp"
+        android:layout_gravity="center_vertical" />
 
+    <TextView
+        android:id="@+id/chamados"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="Chamados"
+        android:layout_marginTop="10dp"
+        android:textColor="#000"
+        android:textSize="16sp"
+        android:layout_gravity="center_vertical" />
 
-        <TextView
-            android:id="@+id/add_service_option"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:text="Adicionar Serviço"
-            android:layout_marginTop="10dp"
-            android:textColor="#000"
-            android:textSize="16sp"
-            android:layout_gravity="center_vertical" />
-
-        <TextView
-            android:id="@+id/chamados"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:text="Chamados"
-            android:layout_marginTop="10dp"
-            android:textColor="#000"
-            android:textSize="16sp"
-            android:layout_gravity="center_vertical" />
-
-        <TextView
-            android:id="@+id/cadastrar_funcionario"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:text="Cadastrar Funcionário"
-            android:layout_marginTop="10dp"
-            android:textColor="#000"
-            android:textSize="16sp"
-            android:layout_gravity="center_vertical" />
+    <TextView
+        android:id="@+id/cadastrar_funcionario"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="Cadastrar Funcionário"
+        android:layout_marginTop="10dp"
+        android:textColor="#000"
+        android:textSize="16sp"
+        android:layout_gravity="center_vertical" />
 
     </LinearLayout>
 </androidx.drawerlayout.widget.DrawerLayout>

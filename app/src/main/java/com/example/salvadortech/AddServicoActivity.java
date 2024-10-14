@@ -6,7 +6,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.Toast;
 import android.widget.ArrayAdapter;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -69,12 +68,12 @@ public class AddServicoActivity extends AppCompatActivity {
         // Obtém o CPF do usuário autenticado
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentUser == null) {
-            Toast.makeText(this, "Usuário não autenticado.", Toast.LENGTH_SHORT).show();
+
             return;
         }
 
         if (TextUtils.isEmpty(descricao) || TextUtils.isEmpty(status)) {
-            Toast.makeText(this, "Por favor, preencha a descrição e o status do serviço.", Toast.LENGTH_SHORT).show();
+
             return;
         }
 
@@ -84,12 +83,7 @@ public class AddServicoActivity extends AppCompatActivity {
         // Usa o push() para gerar um ID único
         databaseReference.push().setValue(servico)
                 .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        Toast.makeText(AddServicoActivity.this, "Serviço adicionado com sucesso!", Toast.LENGTH_SHORT).show();
-                        finish(); // Finaliza a activity
-                    } else {
-                        Toast.makeText(AddServicoActivity.this, "Falha ao adicionar serviço.", Toast.LENGTH_SHORT).show();
-                    }
+
                 });
     }
 }

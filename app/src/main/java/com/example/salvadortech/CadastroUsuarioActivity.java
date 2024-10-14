@@ -88,10 +88,8 @@ public class CadastroUsuarioActivity extends AppCompatActivity {
         databaseReference.child(user.getUid()).setValue(usuario)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        Toast.makeText(CadastroUsuarioActivity.this, "Cadastro realizado com sucesso!", Toast.LENGTH_SHORT).show();
+
                         finish(); // Finaliza a activity
-                    } else {
-                        Toast.makeText(CadastroUsuarioActivity.this, "Falha ao salvar dados do usuário.", Toast.LENGTH_SHORT).show();
                     }
                 });
     }

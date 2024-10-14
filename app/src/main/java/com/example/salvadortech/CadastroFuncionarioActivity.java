@@ -5,7 +5,6 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -53,16 +52,6 @@ public class CadastroFuncionarioActivity extends AppCompatActivity {
         String senha = editTextPassword.getText().toString().trim();
         String repetirSenha = editTextRepeatPassword.getText().toString().trim();
 
-        if (TextUtils.isEmpty(nome) || TextUtils.isEmpty(email) || TextUtils.isEmpty(cpf) || TextUtils.isEmpty(senha) || TextUtils.isEmpty(repetirSenha)) {
-            Toast.makeText(this, "Por favor, preencha todos os campos.", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        if (!senha.equals(repetirSenha)) {
-            Toast.makeText(this, "As senhas não coincidem.", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
         // Tenta criar o usuário no Firebase Authentication
         mAuth.createUserWithEmailAndPassword(email, senha)
                 .addOnCompleteListener(this, task -> {
@@ -70,9 +59,6 @@ public class CadastroFuncionarioActivity extends AppCompatActivity {
                         // Cadastro bem-sucedido, salva os dados no Realtime Database
                         FirebaseUser user = mAuth.getCurrentUser();
                         salvarDadosFuncionario(user, nome, cpf, email); // Chama o método para salvar os dados
-                    } else {
-                        // Exibe a mensagem de erro
-                        Toast.makeText(CadastroFuncionarioActivity.this, "Falha ao criar usuário: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -87,10 +73,7 @@ public class CadastroFuncionarioActivity extends AppCompatActivity {
         databaseReference.child(user.getUid()).setValue(funcionario)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        Toast.makeText(CadastroFuncionarioActivity.this, "Cadastro de funcionário realizado com sucesso!", Toast.LENGTH_SHORT).show();
                         finish(); // Finaliza a activity
-                    } else {
-                        Toast.makeText(CadastroFuncionarioActivity.this, "Falha ao salvar dados do funcionário.", Toast.LENGTH_SHORT).show();
                     }
                 });
     }

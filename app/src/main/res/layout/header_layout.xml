@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/header_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/black"
+    android:padding="16dp">
+
+    <!-- Ícone de Menu de Voltar -->
+    <ImageView
+        android:id="@+id/menu_icon"
+        android:layout_width="33dp"
+        android:layout_height="31dp"
+        android:layout_alignParentStart="true"
+        android:contentDescription="Menu Icon"
+        android:src="@drawable/back" />
+
+    <!-- Título -->
+    <TextView
+        android:id="@+id/header_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/menu_icon"
+        android:layout_marginStart="16dp"
+        android:text="Título da Página"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
+        android:layout_centerVertical="true" />
+
+    <!-- Ícone de Perfil -->
+    <ImageView
+        android:id="@+id/user_icon"
+        android:layout_width="41dp"
+        android:layout_height="31dp"
+        android:layout_alignParentEnd="true"
+        android:contentDescription="User Icon"
+        android:src="@drawable/perfil" />
+
+</RelativeLayout>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+android:id="@+id/bottom_navigation"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:layout_alignParentBottom="true"
+android:orientation="horizontal"
+android:background="@color/black"
+android:padding="8dp"
+android:gravity="center">
+
+<ImageView
+    android:id="@+id/menu_bottom"
+    android:layout_width="32dp"
+    android:layout_height="32dp"
+    android:src="@drawable/historico"
+    android:contentDescription="@string/menu_bottom"
+    android:layout_weight="1" />
+
+<ImageView
+    android:id="@+id/home_bottom"
+    android:layout_width="32dp"
+    android:layout_height="32dp"
+    android:src="@drawable/home"
+    android:contentDescription="Home Bottom"
+    android:layout_weight="1" />
+
+<ImageView
+    android:id="@+id/faq"
+    android:layout_width="32dp"
+    android:layout_height="32dp"
+    android:src="@drawable/ajuda"
+    android:contentDescription="Faq Bottom"
+    android:layout_weight="1" />
+</LinearLayout>
