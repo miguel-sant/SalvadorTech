@@ -5,6 +5,9 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 import android.util.Log;
 import com.google.firebase.database.*;
@@ -16,11 +19,25 @@ public class ChamadosActivity extends AppCompatActivity {
     private ChamadoAdapter adapter;
     private List<Chamado> chamadosList;
     private DatabaseReference databaseReference;
+    private ImageView homeBottom;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chamados); // Certifique-se de que o layout está correto
+
+        // Referenciando o ImageView
+        homeBottom = findViewById(R.id.home_bottom);
+
+        // Definindo o OnClickListener
+        homeBottom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ChamadosActivity.this, HomeActivity.class);
+                startActivity(intent);
+                finish(); // Opcional: Fecha a atividade atual se você não quiser que o usuário retorne a ela
+            }
+        });
 
         recyclerView = findViewById(R.id.recycler_view_chamados);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

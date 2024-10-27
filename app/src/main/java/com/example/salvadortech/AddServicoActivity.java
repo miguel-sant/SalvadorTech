@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.ArrayAdapter;
 
@@ -25,11 +26,25 @@ public class AddServicoActivity extends AppCompatActivity {
     private EditText inputDescricao, inputObservacoes, inputPecas, inputCpf;
     private Spinner statusSpinner;
     private DatabaseReference databaseReference;
+    private ImageView homeBottom;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_servico);
+
+        // Referenciando o ImageView
+        homeBottom = findViewById(R.id.home_bottom);
+
+        // Definindo o OnClickListener
+        homeBottom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(AddServicoActivity.this, HomeActivity.class);
+                startActivity(intent);
+                finish(); // Opcional: Fecha a atividade atual se você não quiser que o usuário retorne a ela
+            }
+        });
 
         inputDescricao = findViewById(R.id.descricao_input); // EditText para descrição do serviço
         statusSpinner = findViewById(R.id.status_spinner); // Spinner para status
