@@ -14,8 +14,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class AddServicoActivity extends AppCompatActivity {
 
@@ -68,34 +71,52 @@ public class AddServicoActivity extends AppCompatActivity {
         String cpfUser = inputCpf.getText().toString().trim();
 
         // Log para verificar os valores
-        Log.d("AddServicoActivity", "Descrição: " + descricao);
-        Log.d("AddServicoActivity", "Status: " + status);
+//        Log.d("AddServicoActivity", "Descrição: " + descricao);
+//        Log.d("AddServicoActivity", "Status: " + status);
 
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        if (currentUser == null) {
-            Log.e("AddServicoActivity", "Usuário não autenticado");
+        if (currentUser == null || TextUtils.isEmpty(descricao) || TextUtils.isEmpty(status)) {
+            Log.e("AddServicoActivity", "Erro: Usuário não autenticado ou descrição/status vazios");
             return;
         }
 
-        if (TextUtils.isEmpty(descricao) || TextUtils.isEmpty(status)) {
-            Log.e("AddServicoActivity", "Descrição ou status vazios");
-            return;
-        }
+        // Array para contornar a limitação de final/effectively final
+        final int[] novoId = {1}; // Valor inicial para o ID
 
-        Servico servico = new Servico(descricao, status, observacoes, pecas, cpfUser);
-
-        databaseReference.push().setValue(servico)
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        Log.d("AddServicoActivity", "Serviço adicionado com sucesso");
-                        // Redirecionar para HomeActivity
-                        Intent intent = new Intent(AddServicoActivity.this, HomeActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK); // Limpa a pilha de atividades
-                        startActivity(intent);
-                        finish(); // Finaliza a atividade atual
-                    } else {
-                        Log.e("AddServicoActivity", "Falha ao adicionar serviço: " + task.getException().getMessage());
+        databaseReference.orderByChild("id").limitToLast(1).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        Servico ultimoServico = snapshot.getValue(Servico.class);
+                        if (ultimoServico != null) {
+                            novoId[0] = ultimoServico.getId() + 1; // Incrementa o último ID encontrado
+                        }
                     }
-                });
+                }
+
+                // Criar o serviço com o novo ID
+                Servico servico = new Servico(descricao, status, observacoes, pecas, cpfUser);
+                servico.setId(novoId[0]); // Define o novo ID
+
+                databaseReference.push().setValue(servico)
+                        .addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                Log.d("AddServicoActivity", "Serviço adicionado com sucesso com ID: " + novoId[0]);
+                                Intent intent = new Intent(AddServicoActivity.this, HomeActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+                                finish();
+                            } else {
+                                Log.e("AddServicoActivity", "Falha ao adicionar serviço: " + task.getException().getMessage());
+                            }
+                        });
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.e("AddServicoActivity", "Erro ao buscar o último ID: " + databaseError.getMessage());
+            }
+        });
     }
 }
